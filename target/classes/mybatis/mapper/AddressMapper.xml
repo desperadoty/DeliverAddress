@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.company.dao.AddressDao">
+    <resultMap id="BaseAddressMapper" type="com.company.entity.Address">
+        <id property="addrId" column="addr_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="province" column="province" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="region" column="region" jdbcType="VARCHAR"/>
+        <result property="street" column="street" jdbcType="VARCHAR"/>
+        <result property="addrDetail" column="addr_detail" jdbcType="VARCHAR"/>
+        <result property="isDefault" column="is_default" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="BaseAddressColumn">
+        addr_id, user_id, name, phone, province, city, region, street, addr_detail, is_default
+    </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM address
+        WHERE addr_id=#{addrId, jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.company.entity.Address">
+        INSERT INTO address(addr_id,user_id,name,phone,province,city,region,street,addr_detail,is_default)
+        VALUES (#{addrId, jdbcType=INTEGER},
+                #{userId, jdbcType=INTEGER},
+                #{name, jdbcType=VARCHAR},
+                #{phone, jdbcType=VARCHAR},
+                #{province, jdbcType=VARCHAR},
+                #{city, jdbcType=VARCHAR},
+                #{region, jdbcType=VARCHAR},
+                #{street, jdbcType=VARCHAR},
+                #{addrDetail, jdbcType=VARCHAR},
+                #{isDefault, jdbcType=BIT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.company.entity.Address">
+        INSERT INTO address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="addrId != null">
+                addr_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="region != null">
+                region,
+            </if>
+            <if test="street != null">
+                street,
+            </if>
+            <if test="addrDetail != null">
+                addr_detail,
+            </if>
+            <if test="isDefault != null">
+                is_default,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="addrId != null">
+                #{addrId, jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId, jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name, jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone, jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province, jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city, jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                #{region, jdbcType=VARCHAR},
+            </if>
+            <if test="street != null">
+                #{street, jdbcType=VARCHAR},
+            </if>
+            <if test="addrDetail != null">
+                #{addrDetail, jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault, jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseAddressMapper">
+        SELECT <include refid="BaseAddressColumn"/>
+        FROM address
+        WHERE addr_id=#{addrId, jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.company.entity.Address">
+        UPDATE address
+        <set>
+            <if test="addrId != null">
+                addr_id=#{addrId, jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id=#{userId, jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name=#{name, jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone=#{phone, jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province=#{province, jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city=#{city, jdbcType=VARCHAR},
+            </if>
+            <if test="region != null">
+                region=#{region, jdbcType=VARCHAR},
+            </if>
+            <if test="street != null">
+                street=#{street, jdbcType=VARCHAR},
+            </if>
+            <if test="addrDetail != null">
+                addr_detail=#{addrDetail, jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                is_default=#{isDefault, jdbcType=BIT},
+            </if>
+        </set>
+        WHERE addr_id=#{addrId, jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.company.entity.Address">
+        UPDATE address
+        SET
+        addr_id=#{addrId, jdbcType=INTEGER},
+        user_id=#{userId, jdbcType=INTEGER},
+        name=#{name, jdbcType=VARCHAR},
+        phone=#{phone, jdbcType=VARCHAR},
+        province=#{province, jdbcType=VARCHAR},
+        city=#{city, jdbcType=VARCHAR},
+        region=#{region, jdbcType=VARCHAR},
+        street=#{street, jdbcType=VARCHAR},
+        addr_detail=#{addrDetail, jdbcType=VARCHAR},
+        is_default=#{isDefault, jdbcType=VARCHAR}
+        WHERE addr_id=#{addrId, jdbcType=INTEGER}
+    </update>
+    
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseAddressMapper">
+        SELECT <include refid="BaseAddressColumn"/>
+        FROM address
+        WHERE user_id=#{userId, jdbcType=INTEGER}
+        ORDER BY is_default DESC,addr_id DESC
+    </select>
+
+    <select id="selectByUserAndAddrId" resultMap="BaseAddressMapper">
+        SELECT <include refid="BaseAddressColumn"/>
+        FROM address
+        WHERE user_id=#{userId, jdbcType=INTEGER}
+        AND addr_id=#{addrId, jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByUserAndAddrId">
+        DELETE FROM address
+        WHERE user_id=#{userId, jdbcType=INTEGER}
+        AND addr_id=#{addrId, jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectDefaultByUserId" parameterType="java.lang.Integer" resultMap="BaseAddressMapper">
+        SELECT <include refid="BaseAddressColumn"/>
+        FROM address
+        WHERE user_id=#{userId, jdbcType=INTEGER}
+        AND is_default=1
+    </select>
+</mapper>

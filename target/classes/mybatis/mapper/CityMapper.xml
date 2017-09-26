@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.company.dao.CityDao">
+    <resultMap id="BaseCityMapper" type="com.company.entity.City">
+        <id column="city_id" property="cityId" jdbcType="INTEGER"/>
+        <result column="province_id" property="provinceId" jdbcType="INTEGER"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="SMALLINT"/>
+        <result column="is_active" property="isActive" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="BaseCityColumn">
+        city_id, province_id, city, position, is_active
+    </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM city
+        WHERE city_id=#{cityId, jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.company.entity.City">
+        INSERT INTO city(city_id, province_id, city, position, is_active)
+        VALUES( #{cityId, jdbcType=INTEGER},
+                #{provinceId, jdbcType=INTEGER},
+                #{city, jdbcType=VARCHAR},
+                #{position, jdbcType=SMALLINT},
+                #{is_active, jdbcType=BIT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.company.entity.City">
+        INSERT INTO city
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="provinceId != null">
+                province_id,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="is_active != null">
+                is_active,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="cityId != null">
+                city_id=#{cityId, jdbcType=INTEGER},
+            </if>
+            <if test="provinceId != null">
+                province_id=#{provinceId, jdbcType=INTEGER},
+            </if>
+            <if test="city != null">
+                city=#{city, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position=#{position, jdbcType=SMALLINT},
+            </if>
+            <if test="is_active != null">
+                is_active=#{isActive, jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseCityMapper">
+        SELECT <include refid="BaseCityColumn"/>
+        FROM city
+        WHERE city_id=#{cityId, jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.company.entity.City">
+        UPDATE city
+        <set>
+            <if test="cityId != null">
+                city_id=#{cityId, jdbcType=INTEGER},
+            </if>
+            <if test="provinceId != null">
+                province_id=#{provinceId, jdbcType=INTEGER},
+            </if>
+            <if test="city != null">
+                city=#{city, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position=#{position, jdbcType=SMALLINT},
+            </if>
+            <if test="is_active != null">
+                is_active=#{isActive, jdbcType=BIT},
+            </if>
+        </set>
+        WHERE city_id={cityId, jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.company.entity.City">
+        UPDATE city
+        SET
+        city_id=#{cityId, jdbcType=INTEGER},
+        province_id=#{provinceId, jdbcType=INTEGER},
+        city=#{city, jdbcType=VARCHAR},
+        position=#{position, jdbcType=SMALLINT},
+        is_active=#{isActive, jdbcType=BIT}
+        WHERE city_id={cityId, jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByProvinceId" parameterType="java.lang.Integer" resultMap="BaseCityMapper">
+        SELECT <include refid="BaseCityColumn"/>
+        FROM city
+        WHERE province_id=#{provinceId, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByCity" parameterType="java.lang.String" resultMap="BaseCityMapper">
+        SELECT <include refid="BaseCityColumn"/>
+        FROM city
+        WHERE city=#{city, jdbcType=VARCHAR}
+    </select>
+</mapper>

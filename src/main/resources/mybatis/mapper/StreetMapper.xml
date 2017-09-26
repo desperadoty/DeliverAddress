@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.company.dao.StreetDao">
+    <resultMap id="BaseStreetMapper" type="com.company.entity.Street">
+        <id column="street_id" property="streetId" jdbcType="INTEGER"/>
+        <result column="region_id" property="regionId" jdbcType="INTEGER"/>
+        <result column="street" property="street" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="SMALLINT"/>
+        <result column="is_active" property="isActive" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="BaseStreetColumn">
+        street_id, region_id, street, position, is_active
+    </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM street
+        WHERE street_id=#{streetId, jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.company.entity.Street">
+        INSERT INTO street(street_id, region_id, street, position, is_active)
+        VALUES( #{streetId, jdbcType=INTEGER},
+                #{regionId, jdbcType=INTEGER},
+                #{street, jdbcType=VARCHAR},
+                #{position, jdbcType=SMALLINT},
+                #{is_active, jdbcType=BIT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.company.entity.Street">
+        INSERT INTO street
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="streetId != null">
+                street_id,
+            </if>
+            <if test="regionId != null">
+                region_id,
+            </if>
+            <if test="street != null">
+                street,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="is_active != null">
+                is_active,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="streetId != null">
+                street_id=#{streetId, jdbcType=INTEGER},
+            </if>
+            <if test="regionId != null">
+                region_id=#{regionId, jdbcType=INTEGER},
+            </if>
+            <if test="street != null">
+                street=#{street, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position=#{position, jdbcType=SMALLINT},
+            </if>
+            <if test="is_active != null">
+                is_active=#{isActive, jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseStreetMapper">
+        SELECT <include refid="BaseStreetColumn"/>
+        FROM street
+        WHERE street_id=#{streetId, jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.company.entity.Street">
+        UPDATE street
+        <set>
+            <if test="streetId != null">
+                street_id=#{streetId, jdbcType=INTEGER},
+            </if>
+            <if test="regionId != null">
+                region_id=#{regionId, jdbcType=INTEGER},
+            </if>
+            <if test="street != null">
+                street=#{street, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position=#{position, jdbcType=SMALLINT},
+            </if>
+            <if test="is_active != null">
+                is_active=#{isActive, jdbcType=BIT},
+            </if>
+        </set>
+        WHERE street_id={streetId, jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.company.entity.Street">
+        UPDATE street
+        SET
+        street_id=#{streetId, jdbcType=INTEGER},
+        region_id=#{regionId, jdbcType=INTEGER},
+        street=#{street, jdbcType=VARCHAR},
+        position=#{position, jdbcType=SMALLINT},
+        is_active=#{isActive, jdbcType=BIT}
+        WHERE street_id={streetId, jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByRegionId" parameterType="java.lang.Integer" resultMap="BaseStreetMapper">
+        SELECT <include refid="BaseStreetColumn"/>
+        FROM street
+        WHERE region_id=#{regionId, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByStreet" parameterType="java.lang.String" resultMap="BaseStreetMapper">
+        SELECT <include refid="BaseStreetColumn"/>
+        FROM street
+        WHERE street=#{street, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByStreetAndRegionId" resultMap="BaseStreetMapper">
+        SELECT <include refid="BaseStreetColumn"/>
+        FROM street
+        WHERE region_id=#{regionId, jdbcType=INTEGER}
+        AND street=#{street, jdbcType=VARCHAR}
+    </select>
+</mapper>

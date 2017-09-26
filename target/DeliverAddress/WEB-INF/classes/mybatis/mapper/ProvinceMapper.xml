@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.company.dao.ProvinceDao">
+    <resultMap id="BaseProvinceMapper" type="com.company.entity.Province">
+        <id column="province_id" property="provinceId" jdbcType="INTEGER"/>
+        <result column="province_code" property="provinceCode" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="SMALLINT"/>
+        <result column="is_active" property="isActive" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="BaseProvinceColumn">
+        province_id, province_code, province, position, is_active
+    </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM province
+        WHERE province_id=#{provinceId, jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.company.entity.Province">
+        INSERT INTO province(province_id, province_code, province, position, is_active)
+        VALUES(#{provinceId, jdbcType=INTEGER},
+               #{provinceCode, jdbcType=VARCHAR},
+               #{province, jdbcType=VARCHAR},
+               #{position, jdbcType=SMALLINT},
+               #{isActive, jdbcType=BIT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.company.entity.Province">
+        INSERT INTO province
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="provinceId != null">
+                province_id,
+            </if>
+            <if test="provinceCode != null">
+                province_code,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="isActive != null">
+                is_active,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="provinceId != null">
+                #{provinceId, jdbcType=INTEGER},
+            </if>
+            <if test="provinceCode != null">
+                #{provinceCode, jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                #{position, jdbcType=SMALLINT},
+            </if>
+            <if test="isActive != null">
+                #{isActive, jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseProvinceMapper">
+          SELECT <include refid="BaseProvinceColumn"/>
+          FROM province
+          WHERE province_id=#{provinceId, jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.company.entity.Province">
+        UPDATE province
+        <set>
+            <if test="provinceId != null">
+                privince_id=#{provinceId, jdbcType=INTEGER},
+            </if>
+            <if test="provinceCode != null">
+                province_code=#{provinceCode, jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province=#{province, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position=#{position, jdbcType=SMALLINT},
+            </if>
+            <if test="isActive != null">
+                is_active=#{isActive, jdbcType=BIT},
+            </if>
+        </set>
+        WHERE province_id=#{provinceId, jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.company.entity.Province">
+        UPDATE province
+        SET
+        province_id=#{provinceId, jdbcType=INTEGER},
+        province_code=#{provinceCode, jdbcType=VARCHAR},
+        province=#{province, jdbcType=VARCHAR},
+        position=#{position, jdbcType=SMALLINT},
+        is_active=#{is_Active, jdbcType=BIT}
+        WHERE province_id=#{provinceId, jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAll" resultMap="BaseProvinceMapper">
+        SELECT <include refid="BaseProvinceColumn"/>
+        FROM province
+    </select>
+
+    <select id="selectByProvince" parameterType="java.lang.String" resultMap="BaseProvinceMapper">
+        SELECT <include refid="BaseProvinceColumn"/>
+        FROM province
+        WHERE province=#{province, jdbcType=VARCHAR}
+    </select>
+</mapper>

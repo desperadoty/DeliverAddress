@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.company.dao.RegionDao">
+    <resultMap id="BaseRegionMapper" type="com.company.entity.Region">
+        <id column="region_id" property="regionId" jdbcType="INTEGER"/>
+        <result column="city_id" property="cityId" jdbcType="INTEGER"/>
+        <result column="region" property="region" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="SMALLINT"/>
+        <result column="is_active" property="isActive" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="BaseRegionColumn">
+        region_id, city_id, region, position, is_active
+    </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM region
+        WHERE region_id=#{regionId, jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.company.entity.Region">
+        INSERT INTO region(region_id, city_id, region, position, is_active)
+        VALUES( #{regionId, jdbcType=INTEGER},
+                #{cityId, jdbcType=INTEGER},
+                #{region, jdbcType=VARCHAR},
+                #{position, jdbcType=SMALLINT},
+                #{is_active, jdbcType=BIT})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.company.entity.Region">
+        INSERT INTO region
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="regionId != null">
+                region_id,
+            </if>
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="region != null">
+                region,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="is_active != null">
+                is_active,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="regionId != null">
+                region_id=#{regionId, jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null">
+                city_id=#{cityId, jdbcType=INTEGER},
+            </if>
+            <if test="region != null">
+                region=#{region, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position=#{position, jdbcType=SMALLINT},
+            </if>
+            <if test="is_active != null">
+                is_active=#{isActive, jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseRegionMapper">
+        SELECT <include refid="BaseRegionColumn"/>
+        FROM region
+        WHERE region_id=#{regionId, jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.company.entity.Region">
+        UPDATE region
+        <set>
+            <if test="regionId != null">
+                region_id=#{regionId, jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null">
+                city_id=#{cityId, jdbcType=INTEGER},
+            </if>
+            <if test="region != null">
+                region=#{region, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position=#{position, jdbcType=SMALLINT},
+            </if>
+            <if test="is_active != null">
+                is_active=#{isActive, jdbcType=BIT},
+            </if>
+        </set>
+        WHERE region_id={regionId, jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.company.entity.Region">
+        UPDATE region
+        SET
+        region_id=#{regionId, jdbcType=INTEGER},
+        city_id=#{cityId, jdbcType=INTEGER},
+        region=#{region, jdbcType=VARCHAR},
+        position=#{position, jdbcType=SMALLINT},
+        is_active=#{isActive, jdbcType=BIT}
+        WHERE region_id={regionId, jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByCityId" parameterType="java.lang.Integer" resultMap="BaseRegionMapper">
+        SELECT <include refid="BaseRegionColumn"/>
+        FROM region
+        WHERE city_id=#{cityId, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByRegion" parameterType="java.lang.String" resultMap="BaseRegionMapper">
+        SELECT <include refid="BaseRegionColumn"/>
+        FROM region
+        WHERE region=#{region, jdbcType=VARCHAR}
+    </select>
+</mapper>

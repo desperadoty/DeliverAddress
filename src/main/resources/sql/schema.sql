@@ -1,0 +1,89 @@
+CREATE DATABASE address;
+
+USE address;
+
+CREATE TABLE IF NOT EXISTS `user` (
+	`user_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(32) NOT NULL COMMENT '淘宝会员名',
+	`password` VARCHAR(32) NOT NULL COMMENT '用户密码',
+	`nick_name` VARCHAR(32) COMMENT '淘宝昵称',
+	`gender` BOOLEAN COMMENT '性别',
+	PRIMARY KEY (`user_id`)
+)	AUTO_INCREMENT = 1
+	ENGINE = InnoDB
+	DEFAULT CHARSET = UTF8
+	COMMENT = '用户信息表';
+
+
+CREATE TABLE IF NOT EXISTS `address` (
+	`addr_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`user_id` INT(11) UNSIGNED NOT NULL,
+	`name` VARCHAR(32) NOT NULL COMMENT '收货人',
+	`phone` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '联系电话',
+	`province` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '所在省',
+	`city` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '所在市',
+	`region` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '所在区',
+	`street` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '所在街道',
+	`addr_detail` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '详细地址',
+	`is_default` BOOLEAN NOT NULL DEFAULT 0 COMMENT '默认地址',
+	PRIMARY KEY (`addr_id`),
+	INDEX(`user_id`),
+	FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE
+)	AUTO_INCREMENT = 1
+	ENGINE = InnoDB
+	DEFAULT CHARSET = UTF8
+	COMMENT '收货地址表';
+
+CREATE TABLE IF NOT EXISTS `province` (
+	`province_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`province_code` INT(11) UNSIGNED NOT NULL,
+	`province` VARCHAR(32) NOT NULL,
+	`position` SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0,
+	`is_active` BOOLEAN NOT NULL DEFAULT 1,
+	PRIMARY KEY (`province_id`)
+)	AUTO_INCREMENT = 1
+	ENGINE = InnoDB
+	DEFAULT CHARSET = UTF8
+	COMMENT = '省份表';
+
+
+CREATE TABLE IF NOT EXISTS `city` (
+	`city_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`province_id` INT(11) UNSIGNED NOT NULL,
+	`city` VARCHAR(32) NOT NULL,
+	`position` SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0,
+	`is_active` BOOLEAN NOT NULL DEFAULT 1,
+	PRIMARY KEY (`city_id`)
+)	AUTO_INCREMENT = 1,
+	ENGINE = InnoDB
+	DEFAULT CHARSET = UTF8
+	COMMENT = '城市表';
+
+CREATE TABLE IF NOT EXISTS `region` (
+	`region_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`city_id` INT(11) UNSIGNED NOT NULL,
+	`region` VARCHAR(32) NOT NULL,
+	`position` SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0,
+	`is_active` BOOLEAN NOT NULL DEFAULT 1,
+	PRIMARY KEY (`region_id`)
+)	AUTO_INCREMENT = 1,
+	ENGINE = InnoDB
+	DEFAULT CHARSET = UTF8
+	COMMENT = '区域表';
+
+CREATE TABLE IF NOT EXISTS `street` (
+	`street_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`region_id` INT(11) UNSIGNED NOT NULL,
+	`street` VARCHAR(32) NOT NULL,
+	`position` SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0,
+	`is_active` BOOLEAN NOT NULL DEFAULT 1,
+	PRIMARY KEY (`street_id`)
+)	AUTO_INCREMENT = 1,
+	ENGINE = InnoDB
+	DEFAULT CHARSET = UTF8
+	COMMENT = '街道表';
+
+INSERT INTO address(user_id, name, phone, province, city, region, street, addr_detail, is_default)
+VALUES (1, '杨静', '18826052684', '广东省', '深圳市', '福田区', '福田街道', '皇岗吉龙一村10-1号',0 ),
+	(1, '杨静', '18826052684', '广东省', '深圳市', '福田区', '福田街道', '皇岗吉龙一村10-2号', 0),
+	(1,'杨静', '18826052684', '广东省', '深圳市','龙岗区','龙岗街道', '南联鹏达路115号',0);
